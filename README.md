@@ -22,7 +22,7 @@ Where <b>W'<sub>bal(t)</sub></b> is equal to <b>W'<sub>bal</sub></b> at time <b>
 
 # Dave Waterworth optimization of integral Skiba algorithm <br>
 Mathematician Dave Waterworth (3) helped core developer of Golden Cheetah (http://www.goldencheetah.org/), Mark Liversedge, to develop an optimization of the Skiba algorithm (6). This reformulation approximates the Skiba algorithm so results can vary a little in extreme cases only, especially when (<b>Tau</b>) is very small compared with the sample time.
-The <b>W'<sup>bal</sub></b> integral part of the equations of Skiba is rewritten by Waterworth to: <br>
+The <b>W'<sub>bal</sub></b> integral part of the equations of Skiba is rewritten by Waterworth to: <br>
 <img src="../main/images/Waterworth_equations.png" width="355" height="160" align = "middle" alt="Waterworth equations"> <br>
 Where <b>S(t)</b> is a running sum at time t after the start, other symbols conform the previous equations. <b>Tau</b> (<b>Ʈ<sub>W'</sub></b>) and <b>W'<sub>exp(t)</sub></b> are calculated with the original equations presented by Skiba. The integral Skiba algorithm is quite expensive to compute, even on fast computers since the summation must be repeated for every time <b>t</b> again. 
 The big advantage of the Waterworth optimization is that now <b>W' balance</b> can be calculated at real time: during the ride and not only afterwards! In addition it is very helpful when one wants to determine the <b>Critical Power</b> on the fly during HIIT workouts or strenuous workouts when <b>W' balance</b> becomes negative and has been depleted!
