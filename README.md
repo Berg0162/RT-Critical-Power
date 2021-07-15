@@ -183,7 +183,7 @@ uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, u
 <img src="../main/images/Screenshot.jpg" width="250" height="400" align = "middle" alt="Airflow app"> <br>
 
 # Example Critical Power on the fly
-When a workout is applied, like in the following image, .....
+When a cyclist (CP = 140 watt and W Prime = 7.2 kJ) is doing a workout with the following properties, <b>W Prime</b> is depleted several times and <b>CP</b> will be updated just as often. Run the video to see the related results in time...
 <img src="../main/images/Workout.png" width="6730" height="274" align = "middle" alt="Workout"> <br>
 
 https://user-images.githubusercontent.com/57005514/125782300-2790e8e7-a683-4040-8e79-d6eaab223613.mp4
