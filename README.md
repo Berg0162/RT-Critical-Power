@@ -182,7 +182,8 @@ uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, u
 # Airflow app
 <img src="../main/images/Screenshot.jpg" width="250" height="400" align = "middle" alt="Airflow app"> <br>
 
-   tttt
+# Example Critical Power on the fly
+
 
 https://user-images.githubusercontent.com/57005514/125782300-2790e8e7-a683-4040-8e79-d6eaab223613.mp4
  
