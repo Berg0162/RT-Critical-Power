@@ -33,10 +33,10 @@ Mathematically, the Power-Duration relationship is described as a hyperbolic fun
    <strong>T<sub>lim</sub> = W′/(P-CP)</strong> <br><br>
 This equation highlights that the time to intolerance above CP is a function of the proximity of the power output (<b>P</b>) being sustained to <b>CP</b> and the size of <b>W'</b>. When <b>P</b> is considerably above <b>CP</b>, the constant amount of work represented by the <b>W'</b> parameter will be utilized rapidly and <b>T<sub>lim</sub></b> will be short. Should <b>P</b> be closer to <b>CP</b>, then <b>W'</b> would be ‘used’ more slowly and <b>T<sub>lim</sup></b> would be longer. A crucial consideration here is that <b>W'</b> is assumed to be constant for all <b>P</b> above <b>CP</b>. This ‘<b>two parameter</b>’ power-time or power-duration model therefore implies that absolute exercise performance depends on simply the value of <b>CP</b> (in Watts) and the value of <b>W'</b> (in Joules). Both <b>CP</b> and <b>W'</b> parameters can vary considerably among individuals as a function of health/disease, age, fitness, and training.
 
-   # Code
+# Code
    
-   # Airflow app
-   <img src="../main/images/Screenshot.jpg" width="450" height="800" align = "middle" alt="Airflow app"> <br>
+# Airflow app
+<img src="../main/images/Screenshot.jpg" width="250" height="400" align = "middle" alt="Airflow app"> <br>
    
 # References
 1. Hunter A, Coggan A. Training and Racing with a Power Meter. Boulder (CO): Velo Press; 2010. p. 5-20, 41-65 p. 9
