@@ -16,14 +16,14 @@ It was clear to me that the Xert app is based on depletion of the so-called <b>A
 # It is all about algorithms <br>
 The algorithms that had to be implemented are the original Dr. Skiba algorithm (2) and an optimization (approximation) of the Integral Skiba algorithm by Dave Waterworth (3). Aart Goossens published code (in Python) and explanatory information on Github (4) that helped enormously to understand and implement the different algorithms in an Arduino setting. The following information is paraphrased from his original work, to give the reader some insight in the mathematical background of the algorithms, see his work at: https://github.com/AartGoossens/publications/blob/master/w_balance_algorithms/article.ipynb <br>
 # Integral Skiba algorithm <br>
-The integral Skiba algorithm is the best-known algorithm to calculate W' balance and has been scientifically validated (5). The equations for the algorithm are:
-<img src="../main/images/W_Prime_equations.png" width="200" height="100" align = "middle" alt="W Prime equations">
+The integral Skiba algorithm is the best-known algorithm to calculate W' balance and has been scientifically validated (5). The equations for the algorithm are: <br>
+<img src="../main/images/W_Prime_equations.png" width="400" height="100" align = "middle" alt="W Prime equations">
 Where W ’ bal (t) is equal to W ' bal at time t, W ’ is the amount of available energy above CP (Critical Power), t the time for which W ' bal is calculated, u the iterator of the summation, W ’ exp (u) amount of energy above CP that is used at time u (expended), e the Euler number and Ʈ W ’  (pronounced Tau) a time constant that describes the recovery speed. The numbers 546, -0.01 and 316 are determined experimentally in Skiba's original article and do not change between individuals. DCP is the difference between CP and the average power of the intervals in which the power was below CP.  DCP can be calculated dynamically (the average until time t) or calculated once for the entire workout and used as a static value. Skiba recommends using a static value for DCP. P(t) is the power produced at time t.
 
 # Dave Waterworth optimization of integral Skiba algorithm <br>
 Mathematician Dave Waterworth (3) helped core developer of Golden Cheetah (http://www.goldencheetah.org/) Mark Liversedge to develop an optimization of the Skiba algorithm (6). This reformulation approximates the Skiba algorithm so results can vary a little in extreme cases only, especially when (Tau) is very small compared with the sample time.
-The W ‘ bal integral part of the equations of Skiba is rewritten by Waterworth to:
-<img src="../main/images/Waterworth_equations.png" width="200" height="100" align = "middle" alt="Waterworth equations">
+The W ‘ bal integral part of the equations of Skiba is rewritten by Waterworth to: <br>
+<img src="../main/images/Waterworth_equations.png" width="400" height="100" align = "middle" alt="Waterworth equations">
 Where S(t) is a running sum at time t after the start, other symbols conform the previous equations. Tau (Ʈ W ’ ) and W ’exp(t)  are calculated with the original equations presented by Skiba. The integral Skiba algorithm is quite expensive to compute, even on fast computers since the summation must be repeated for every time t again. 
 The big advantage of the Waterworth optimization is that now W ‘ balance can be calculated at real time: during the ride and not only afterwards! In addition it is very helpful when one wants to determine the Critical Power on the fly during HIIT workouts or strenuous workouts when W ‘ balance becomes negative and has been depleted!
 
