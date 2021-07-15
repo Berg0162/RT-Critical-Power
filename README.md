@@ -48,6 +48,18 @@ bool IsShowWprimeValuesDominant = false;  // Boolean that determines to show W P
 //-------------------------------------------------------   
 ```
    
+```C++
+// ------------------------   W'Balance Functions  -----------------------------------
+uint16_t CalculateAveragePowerBelowCP(uint16_t iPower, uint16_t iCP);
+void CalculateAveragePowerAboveCP(uint16_t iPower, uint16_t &iavPwr, unsigned long &iCpACp);
+double tau_w_prime_balance(uint16_t iPower, uint16_t iCP);
+void w_prime_balance_waterworth(uint16_t iPower, uint16_t iCP, uint16_t iw_prime);
+void ConstrainW_PrimeValue(uint16_t &iCP, uint16_t &iw_prime);
+uint16_t GetCPfromTwoParameterAlgorithm(uint16_t iav_Power, unsigned long iT_lim, uint16_t iw_prime);
+uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, uint16_t iCP);
+// ------------------------   W'Balance Functions  ------------------------------------
+```
+
 ```C++  
 uint16_t CalculateAveragePowerBelowCP(uint16_t iPower, uint16_t iCP){
   // calculate avg_power_below_cp real time using a running sum and counter
