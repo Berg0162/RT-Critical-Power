@@ -188,7 +188,8 @@ When a cyclist (CP = 140 watt and W Prime = 7.2 kJ) is doing a workout with the 
 
 https://user-images.githubusercontent.com/57005514/125782300-2790e8e7-a683-4040-8e79-d6eaab223613.mp4
  
-[You can find the code of this example in the repository]
+* [You can find the code of this example in the repository](../main/arduino/code.ino) <br>
+   
 # References
 1. Hunter A, Coggan A. Training and Racing with a Power Meter. Boulder (CO): Velo Press; 2010. p. 5-20, 41-65 p. 9
 2. Skiba, P. F., Chidnok, W., Vanhatalo, A., & Jones, A. M. (2012). Modelling the expenditure and reconstitution of work capacity above critical power. Medicine and science in sports and exercise, 44(8), 1526-1532.
