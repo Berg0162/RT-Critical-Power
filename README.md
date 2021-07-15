@@ -1,10 +1,10 @@
 # Real Time Critical Power on the fly
 
-I was puzzled by a publication that claimed to “Measure your FTP in a minute” in BikeRadar (https://www.bikeradar.com/advice/fitness-and-training/measure-your-ftp-in-a-minute-app-claims/?image=4&type=gallery&gallery=1&embedded_slideshow=1). Further Googling revealed that baronbiosys.com developed an Xert-app that claims this:
+I was puzzled by a publication that claimed to “Measure your FTP in a minute” in BikeRadar (https://www.bikeradar.com/advice/fitness-and-training/measure-your-ftp-in-a-minute-app-claims/?image=4&type=gallery&gallery=1&embedded_slideshow=1). Further Googling revealed that baronbiosys.com developed an <b>Xert-app</b> that claims this:
 
 > The method uses sophisticated techniques and pattern recognition to determine your FTP. Whereas in the past you either needed to test using a 20 minute FTP protocol for example, or examine many months’ worth of data to get a realistic FTP value, this method enables you to determine your FTP on that day or even at that moment. (cf https://baronbiosys.com/real-time-ftp-determination/)
 > 
-After installing the Xert app on my Garmin (830), I have experienced, until free trial time was expended, that it does its estimates of FTP remarkably well. DcRainmaker reviewed it and is quite positive about its performance and accuracy and concluded:
+After installing the <b>Xert app</b> on my Garmin (830), I have experienced, until free trial time was expended, that it does its estimates of <b>FTP</b> remarkably well. DcRainmaker reviewed it and is quite positive about its performance and accuracy and concluded:
 > Whereas here it is the fact that I am getting FTP feedback in real-time that is so unique.  I can go out for a ride and start to see these values formulate as I am giving hard efforts.  No waiting hours, or even minutes later.  I am not aware of any other platform or app that does that. (cf https://www.dcrainmaker.com/2017/07/xert-rolls-out-free-real-time-ftp-app-on-garmin-devices.html) 
 > 
 I decided to develop C++ code for indoor training application that is running on an <b>Arduino nRF52</b> board and that comes as close as possible to the functionality of the <b>Xert app</b> (for Garmin Connect). The following is an explanation of the science and math behind its fundamentals. <br>
