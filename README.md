@@ -34,7 +34,198 @@ Mathematically, the Power-Duration relationship is described as a hyperbolic fun
 This equation highlights that the time to intolerance above CP is a function of the proximity of the power output (<b>P</b>) being sustained to <b>CP</b> and the size of <b>W'</b>. When <b>P</b> is considerably above <b>CP</b>, the constant amount of work represented by the <b>W'</b> parameter will be utilized rapidly and <b>T<sub>lim</sub></b> will be short. Should <b>P</b> be closer to <b>CP</b>, then <b>W'</b> would be ‘used’ more slowly and <b>T<sub>lim</sup></b> would be longer. A crucial consideration here is that <b>W'</b> is assumed to be constant for all <b>P</b> above <b>CP</b>. This ‘<b>two parameter</b>’ power-time or power-duration model therefore implies that absolute exercise performance depends on simply the value of <b>CP</b> (in Watts) and the value of <b>W'</b> (in Joules). Both <b>CP</b> and <b>W'</b> parameters can vary considerably among individuals as a function of health/disease, age, fitness, and training.
 
 # Code
-   
+```C++  
+uint16_t CalculateAveragePowerBelowCP(uint16_t iPower, uint16_t iCP){
+  // calculate avg_power_below_cp real time using a running sum and counter
+  static unsigned long int CountPowerBelowCP = 0;
+  static unsigned long int SumPowerBelowCP = 0;
+    if (iPower < iCP) { 
+      SumPowerBelowCP += (unsigned long int)iPower;
+      CountPowerBelowCP++;
+      }
+  return uint16_t(SumPowerBelowCP/CountPowerBelowCP); // average power below CP
+}   // end calculate avg_power_below_cp
+
+void CalculateAveragePowerAboveCP(uint16_t iPower, uint16_t &iavPwr, unsigned long int &iCpACp){
+  // calculate avg_power_above_cp real time using a running sum and counter
+  // returning the values by C++ reference!
+  static unsigned long int SumPowerAboveCP = 0;
+      SumPowerAboveCP += (unsigned long int)iPower;
+      iCpACp++;
+      iavPwr = uint16_t(SumPowerAboveCP/iCpACp); // average power above CP
+}   // end calculate avg_power_above_cp
+
+double tau_w_prime_balance(uint16_t iPower, uint16_t iCP){  
+    uint16_t avg_power_below_cp = CalculateAveragePowerBelowCP(iPower, iCP);
+    double delta_cp = double(iCP - avg_power_below_cp);
+    return (double(546.00) * exp(-0.01 * delta_cp) + double(316.00));
+}   // end Tau W Prime Balance
+
+void w_prime_balance_waterworth(uint16_t iPower, uint16_t iCP, uint16_t iw_prime) {
+    // Most power meters measure power, torque a.o. in a high frequency (20-60 Hz) but 
+    // transmit (BLE) datasets to a monitoring device in much lower frequency: 1-4 times per second.
+    int power_above_cp = 0; // Power > CP
+    static double T_lim = 0; // Time (duration) while Power is above CP, the summed value of every sample time value P > CP
+    double w_prime_expended = 0.0; // Expended energy in Joules
+    double ExpTerm1 = 0.0, ExpTerm2 = 0.0;
+    static double TimeSpent = 0.0; // Total Time spent in the workout, the summed value of every sample time value
+    static double running_sum = 0.0;
+    static unsigned long int CountPowerAboveCP = 0; // Count the Power readings above CP 
+    static uint16_t avPower = 0; // Average power above CP
+    const long int NextLevelStep = 1000; // Stepsize of the next level of w-prime modification --> 1000 Joules step
+    static long int NextUpdateLevel = 0; // The next level at which to update eCP, e_w_prime_mod and ew_prime_test
+    // Quarq Dfour Zero Spider power meter sends between 2 and 1.2 power readings per second, dependent of POWER level !!!
+    // We assume that the sample frequency (number of samples per second) is VARIABLE !!!
+    // Determine the individual sample time in seconds, it may/will vary during the workout !!! 
+    static unsigned long PrevReadingTime = 0;
+    double SampleTime  = double(millis()-PrevReadingTime)/1000; // Time or duration since the previous sample, convert from millis to seconds
+    PrevReadingTime = millis(); // Update for the next sample
+    double tau = tau_w_prime_balance(iPower, iCP); // Determine the value for tau
+    TimeSpent += SampleTime ; // The summed value of all sample time values during the workout
+    power_above_cp = (iPower - iCP);
+#ifdef DEBUGAIR
+    Serial.printf("Time:%6.1f ST: %4.2f tau: %f ", TimeSpent, SampleTime , tau);
+#endif
+    // w_prime is energy and measured in Joules = Watt*second
+    // Determine the expended energy above CP since the previous measurement (--> i.e. during sample time)
+    w_prime_expended = double(max(0, power_above_cp))*SampleTime; // Determine (Watts_above_CP) * (its duration in seconds) = expended energy in Joules!
+    // Calculate some terms of the equation
+    ExpTerm1 = exp(TimeSpent/tau); // Exponential term1
+    ExpTerm2 = exp(-TimeSpent/tau); // Exponential term2
+#ifdef DEBUGAIR
+    Serial.printf("W prime expended: %3.0f exp-term1: %f exp-term2: %f ", w_prime_expended , ExpTerm1, ExpTerm2);
+#endif
+    running_sum = running_sum + (w_prime_expended*ExpTerm1); // Determine the running sum
+#ifdef DEBUGAIR
+    Serial.printf("Running Sum: %f ", running_sum);
+#endif    
+    w_prime_balance = (long int)( (double)iw_prime - (running_sum*ExpTerm2) ) ; // Determine w prime balance and cast from double to int
+#ifdef DEBUGAIR
+    Serial.printf(" w_prime_balance: %d ", w_prime_balance);
+#endif
+    //--------------- extra --------------------------------------------------------------------------------------
+    // Workout starts at a certain W'= ##,### Joules and CP = ### watts, set by the user; the algorithm increases CP and W' stepwise
+    // to more realistic values every time when W'balance is depleted to a certain level; -> 2-Parameter Algorithm updates CP and W'
+    if (power_above_cp > 0) { 
+      CalculateAveragePowerAboveCP(iPower, avPower, CountPowerAboveCP); // Average power above CP is to be calculated for future use
+      T_lim += SampleTime ; // Time to exhaustion: the accurate sum of every second spent above CP, calculated for future use
+    }
+#ifdef DEBUGAIR
+    Serial.printf(" [%d]\n", CountPowerAboveCP);
+#endif
+    // When working above CP, the moment comes that we need to update eCP and ew_prime !!
+    if ( (w_prime_balance < NextUpdateLevel) && (w_prime_expended > 0) ) { // W' balance is further depleted --> test for an update moment
+       NextUpdateLevel -= NextLevelStep; // Move down another level of depletion, update eCP, ew_prime_mod and ew_prime_test
+       eCP = GetCPfromTwoParameterAlgorithm(avPower, T_lim, iw_prime); // Estimate a new eCP value
+       ew_prime_mod = w_prime_usr - NextUpdateLevel; // Adjust ew_prime_modified to the next level of depletion to be checked
+       ew_prime_test = GetWPrimefromTwoParameterAlgorithm(uint16_t(eCP*1.045), double(1200), eCP); // 20-Min-test estimate for W-Prime
+#ifdef DEBUGAIR
+       Serial.printf("Update of eCP - ew_prime %5d - avPower: %3d - T-lim:%6.1f --> eCP: %3d ", ew_prime_mod, avPower, T_lim, eCP);
+       Serial.printf("--> Test estimate of W-Prime: %d \n", ew_prime_test );
+#endif
+    }
+    //-----------------extra -------------------------------------------------------------------------------
+} // end
+
+/* 19 mei 2021
+void w_prime_balance_waterworth(uint16_t iPower, uint16_t iCP, uint16_t iw_prime) {
+    // Most power meters measure power, torque a.o. in a high frequency (20-60 Hz) but 
+    // transmit (BLE) datasets to a monitoring device only about 1 per second.
+    // Quarq Dfour Zero Spider power meter sends between 2 and 1.0 power readings per second dependent of POWER level !!!
+    int power_above_cp = 0;
+    static double T_lim = 0; // Time spent during power_above_cp
+    double w_prime_expended = 0.0;
+    double ExpTerm1 = 0.0, ExpTerm2 = 0.0;
+    static double running_sum = 0.0;
+    static unsigned long int CountPowerAboveCP = 0; // Count the power readings above CP 
+    static uint16_t avPower = 0; // Average power above CP
+    const long int NextLevelStep = 1000; // Stepsize of the next level of w-prime modification --> 1000 Joules
+    static long int NextUpdateLevel = 0; // The next level at which to update eCP, e_w_prime_mod and ew_prime_test
+    
+    double tau = tau_w_prime_balance(iPower, iCP); // Determine the value for tau
+    
+    // Accurately calculate sample time in seconds and count power readings
+    // sampling rate is the number of samples per second and equals 1/sample_time ! 
+    static unsigned long PrevReadingTime = 0;
+    double Sample_Time = double(millis()-PrevReadingTime)/1000; // millis to seconds
+    PrevReadingTime = millis();
+    static unsigned long NumOfPowerReadings = 0;
+    NumOfPowerReadings++;
+    power_above_cp = (iPower - iCP);
+#ifdef DEBUGAIR
+    Serial.printf("CNT:%4d ST: %5.3f tau: %f ", NumOfPowerReadings, Sample_Time, tau);
+#endif
+    // w_prime is energy (unit in Joules) so we need to detemine Watts * seconds to get Energy!
+    // Determine the spent energy (above CP) since the last measurement (--> during sample time)
+    w_prime_expended = double(max(0, power_above_cp))/Sample_Time;  // replaced *sampling_rate with /Sample_Time in seconds
+    // WorkoutTime is the time spent during the workout in seconds (present-time - start-time) therefore
+    ExpTerm1 = exp(double(NumOfPowerReadings)/tau);  // (WorkoutTime*sampling_rate) is equivalnet to NumOfPowerReadings
+    ExpTerm2 = exp(-double(NumOfPowerReadings)/tau); // (WorkoutTime*sampling_rate) is equivalnet to NumOfPowerReadings
+#ifdef DEBUGAIR
+    Serial.printf("W prime expended: %3.0f exp-term1: %f exp-term2: %f ", w_prime_expended , ExpTerm1, ExpTerm2);
+#endif
+    running_sum = running_sum + (w_prime_expended*ExpTerm1); //
+#ifdef DEBUGAIR
+    Serial.printf("Running Sum: %f ", running_sum);
+#endif    
+    w_prime_balance = (long int)( (double)iw_prime - (running_sum*ExpTerm2) ) ; // cast from double to int
+#ifdef DEBUGAIR
+    Serial.printf(" w_prime_balance: %d ", w_prime_balance);
+#endif
+    //--------------- extra --------------------------------------------------------------------------------------
+    // Workout starts at a certain W'= ##,### Joules and CP = ### watts, set by the user; the algorithm increases CP and W' stepwise
+    // to more realistic values every time when W'balance is depleted to a certain level; -> 2-Parameter Algorithm updates CP and W'
+    if (power_above_cp > 0) { 
+      CalculateAveragePowerAboveCP(iPower, avPower, CountPowerAboveCP); // Average power > CP is to be calculated for later use
+      T_lim += Sample_Time; // Limit Time is Sum of Sample Time spent above CP, calculated for later use
+    }
+#ifdef DEBUGAIR
+//    Serial.printf(" [%d]\n", CountPowerAboveCP);
+#endif
+    // When working above CP, the moment comes that we need to update eCP and ew_prime !!
+    if ( (w_prime_balance < NextUpdateLevel) && (w_prime_expended > 0) ) { // W' balance is further depleted --> test for an update moment
+       NextUpdateLevel -= NextLevelStep; // Move down another level of depletion, update eCP, ew_prime_mod and ew_prime_test
+#ifdef DEBUGAIR
+//       UpdateCNT++; // Count number of eCP updates FOR TESTING ONLY
+#endif
+       eCP = GetCPfromTwoParameterAlgorithm(avPower, T_lim, iw_prime); // Estimate a new eCP value
+       ew_prime_mod = w_prime_usr - NextUpdateLevel; // Adjust ew_prime_modified to the next level of depletion to be checked
+       ew_prime_test = GetWPrimefromTwoParameterAlgorithm(uint16_t(eCP*1.045), double(1200), eCP); // 20-min-test estimate for W-Prime
+#ifdef DEBUGAIR
+       Serial.printf("Update of eCP - ew_prime %5d - avPower: %3d - T-lim:%6.1f --> eCP: %3d ", ew_prime_mod, avPower, T_lim, eCP);
+       Serial.printf("--> 20-min-test-estimate of W-Prime: %d \n", ew_prime_test );
+#endif
+    }
+    //-----------------extra -------------------------------------------------------------------------------
+} // end
+*/
+
+// Check and Set starting value of w_prime to realistic numbers!!
+void ConstrainW_PrimeValue(uint16_t &iCP, uint16_t &iw_prime) {
+    if (iCP < 100) { iCP = 100; } // Update to lowest level that we allow for
+    // First determine the "minimal" value for W_Prime according to a 20-min-test estimate, given the iCP value! 
+    uint16_t w_prime_estimate = GetWPrimefromTwoParameterAlgorithm(uint16_t(iCP*1.045), double(1200), iCP); 
+    if (iw_prime < w_prime_estimate) { iw_prime = w_prime_estimate; } // Update iw_prime to a realistic level
+    return;
+} // end
+
+uint16_t GetCPfromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, uint16_t iw_prime) {
+     uint16_t WprimeDivTlim = uint16_t( double(iw_prime)/iT_lim ); // type cast for correct calculations
+     if (iav_Power > WprimeDivTlim){ // test for out of scope
+      return (iav_Power - WprimeDivTlim); // Solve 2-parameter algorithm to estimate CP
+      } else {
+      return eCP; // Something went wrong do'nt allow an update of CP
+     }
+} // end
+
+uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, uint16_t iCP) {
+     if (iav_Power > iCP){ // test for out of scope
+      return (iav_Power-iCP)*((uint16_t)iT_lim); // Solve 2-parameter algorithm to estimate new W-Prime
+      } else {
+      return w_prime_usr; // Something went wrong do'nt allow an update of w_prime
+     }
+} // end
+```  
 # Airflow app
 <img src="../main/images/Screenshot.jpg" width="250" height="400" align = "middle" alt="Airflow app"> <br>
    
