@@ -163,7 +163,7 @@ uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, u
      if (iav_Power > iCP){ // test for out of scope
       return (iav_Power-iCP)*((uint16_t)iT_lim); // Solve 2-parameter algorithm to estimate new W-Prime
       } else {
-      return w_prime_usr; // Something went wrong do'nt allow an update of w_prime
+      return w_prime_usr; // Something went wrong don't allow an update of w_prime
      }
 } // end
 ```  
