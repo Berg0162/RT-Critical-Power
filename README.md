@@ -183,11 +183,12 @@ uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, u
 <img src="../main/images/Screenshot.jpg" width="250" height="400" align = "middle" alt="Airflow app"> <br>
 
 # Example Critical Power on the fly
-When a cyclist (CP = 140 watt and W Prime = 7.2 kJ) is doing a workout with the following duration and intensity, <b>W Prime</b> is depleted several times and <b>CP</b> as well as <b>W Prime</b> will be updated during workout time. Run the video to see the workout related results as they are calculated in <b>Real Time</b> and shown on an OLED screen... Notice the horizontal bar shrink when power is above <b>CP</b> at 175 and 195 watts. The bar is proportional with <b>W' Balance</b>!
+When a cyclist (CP = 140 watt and W Prime = 7.2 kJ) is doing a workout with the following duration and intensity, <b>W Prime</b> is depleted several times and <b>CP</b> as well as <b>W Prime</b> will be updated during workout time. Run the video to see the workout related results as they were calculated in <b>Real Time</b> and shown on an OLED screen... Notice the horizontal bar shrink when power is above <b>CP</b> at 175 and 195 watts. The bar is proportional with <b>W' Balance</b>!
 <img src="../main/images/Workout.png" width="6730" height="274" align = "middle" alt="Workout"> <br>
 
 https://user-images.githubusercontent.com/57005514/125782300-2790e8e7-a683-4040-8e79-d6eaab223613.mp4
  
+[You can find the code of this example in the repository]
 # References
 1. Hunter A, Coggan A. Training and Racing with a Power Meter. Boulder (CO): Velo Press; 2010. p. 5-20, 41-65 p. 9
 2. Skiba, P. F., Chidnok, W., Vanhatalo, A., & Jones, A. M. (2012). Modelling the expenditure and reconstitution of work capacity above critical power. Medicine and science in sports and exercise, 44(8), 1526-1532.
