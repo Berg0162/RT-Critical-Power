@@ -1,4 +1,4 @@
-# Real Time Critical Power on the fly
+# Critical Power on the fly
 
 I was puzzled by a publication that claimed it is possible to <ins>Measure your FTP in a Minute</ins> in [BikeRadar](https://www.bikeradar.com/advice/fitness-and-training/measure-your-ftp-in-a-minute-app-claims/?image=4&type=gallery&gallery=1&embedded_slideshow=1). Further Googling revealed that baronbiosys.com developed an <b>Xert-app</b> that claims this:
 
