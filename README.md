@@ -181,6 +181,8 @@ uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, u
 ```  
 # Airflow app
 <img src="../main/images/Screenshot.jpg" width="250" height="400" align = "middle" alt="Airflow app"> <br>
+The code has been integrated in a larger project called <b>Airflow</b>. Setting or changing your basal <b>CP</b> and <b>W Prime</b> are an integral part of an <b>AIRFLOW</b> Companion app!
+   The <b>AIRFLOW</b> smart device continuously tunes the requested airflow velocity of the cooling fan(s) for a stable Heat Balance during all phases of an indoor cycling workout, warm-up, intensity intervals, intermittent recovery and at cooldown. The cyclist has no on-the-way interference and can fully concentrate on the demands of the stationay trainer workout, always facing the ideal airstream that will cool him/her appropriately. In addition the cyclists gets (as a bonus) insight in the development of his/her <b>Critical Power</b> when training intensity is intense and long enough! The applied <b>Arduino nRF52480 Express</b> CPU is so powerfull that Real Time calculation of <b>CP</b> and >b>W Prime</b> can be accomplished aside all the calculations for determining the Heat Balance terms and setting the fans to the appropriate blowing capacity.
    
 * [Airflow project](https://github.com/Berg0162/airflow) <br>
 
