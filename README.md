@@ -181,6 +181,8 @@ uint16_t GetWPrimefromTwoParameterAlgorithm(uint16_t iav_Power, double iT_lim, u
 ```  
 # Airflow app
 <img src="../main/images/Screenshot.jpg" width="250" height="400" align = "middle" alt="Airflow app"> <br>
+   
+* [Airflow project](https://github.com/Berg0162/airflow) <br>
 
 # Example Critical Power on the fly
 A cyclist (properties: <b>CP = 140 watt</b> and <b>W Prime = 7.2 kJ</b>) is doing an intense workout with the duration and intensity as shown in the figure. <b>W Prime</b> is depleted several times during the first interval block. New values for <b>CP</b> and <b>W Prime</b> will be estimated by the algorithm during workout time only when appropriate. Run the video to see 100% depletion of W Prime and the estimated values as they were calculated in <b>Real Time</b> and presented on an OLED screen... Notice how the horizontal bar shrinks when power is above <b>CP</b> at 175 and 195 watts. The bar is proportional with <b>W' Balance</b> and in addition what is "left in the tank" is shown as a percentage! Readings are shown in an accellerated sequence and do not conform indicated time duration of the workout!
