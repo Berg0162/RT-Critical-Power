@@ -1,6 +1,6 @@
 # Critical Power on the fly
 
-I was puzzled by a publication that claimed it is possible to <ins>Measure your FTP in a Minute</ins> in [BikeRadar](https://www.bikeradar.com/advice/fitness-and-training/measure-your-ftp-in-a-minute-app-claims/?image=4&type=gallery&gallery=1&embedded_slideshow=1). Further Googling revealed that baronbiosys.com developed an <b>Xert-app</b> that claims this:
+I was puzzled by a publication that claimed it is possible to <i>Measure your FTP in a Minute</i> in [BikeRadar](https://www.bikeradar.com/advice/fitness-and-training/measure-your-ftp-in-a-minute-app-claims/?image=4&type=gallery&gallery=1&embedded_slideshow=1). Further Googling revealed that baronbiosys.com developed an <b>Xert-app</b> that claims this:
 
 > The method uses sophisticated techniques and pattern recognition to determine your FTP. Whereas in the past you either needed to test using a 20 minute FTP protocol for example, or examine many months’ worth of data to get a realistic FTP value, this method enables you to determine your FTP on that day or even at that moment. cf [Baronbiosys]( https://baronbiosys.com/real-time-ftp-determination/)
 > 
